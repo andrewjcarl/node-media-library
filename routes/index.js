@@ -2,34 +2,21 @@ var express = require('express');
 var glob = require('glob');
 var probe = require('node-ffprobe');
 var config = require('../config');
+var videos = require('../videos');
 var router = express.Router();
-
-/*probe('C:/Users/acarl/Dropbox/Videos/VIDEO0013_01.mp4', function(err,data) {
-  console.log(err);
-  console.log(data);
-});*/
-
-var _videos = [];
-
-glob(config.MEDIA_DIRECTORY + '/*.mp4', {}, function(err,files) {
-    _videos = files.map(function(file) {
-      return {name:file};
-    });
-});
-
-console.log(_videos);
 
 router.get('/', function(req,res,next) {
   res.render('index', {
-    videos: _videos
+    videos: videos.getFromDirectory()
   });
 });
 
-router.get('/stream', function(req,res,next) {
+router.get('/stream/:id', function(req,res,next) {
+  var video = videos.getHashedVideos()[req.params.id];
   res.render('stream', {
-    id: req.params.id
+    id: req.params.id,
+    video: video
   });
 });
-
 
 module.exports = router;

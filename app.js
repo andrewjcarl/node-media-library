@@ -8,31 +8,26 @@ var exphbs = require('express-handlebars');
 
 var index = require('./routes/index');
 var stream = require('./routes/stream');
+var api = require('./routes/api');
 
 var app = express();
 
 app.set('views', __dirname + '/views');
 
-app.engine('.hbs', exphbs({defaultLayout: 'layout', extname: '.hbs'}));
-app.set('view engine', '.hbs');
+app.engine('hbs', exphbs({defaultLayout: 'layout', extname: '.hbs'}));
+app.set('view engine', 'hbs');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', index);
+app.use('/', index);
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
+app.use('/api',api);
 
+
+/*
 var BinaryServer = require('binaryjs').BinaryServer;
 
 var files = {};
@@ -52,15 +47,7 @@ server.on('connection', function(client){
     }
  });
 });
-
-/*var _files = [];
-glob(config.MEDIA_DIRECTORY + '/*.mp4',{},function(err, files) {
-  for(var i = 0; i < files.length; i++) {
-    _files.push({name:files[i]});
-  }
-});
 */
-
 
 app.listen(8000);
 

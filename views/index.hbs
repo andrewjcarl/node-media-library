@@ -1,3 +1,10 @@
 {{#each videos}}
-  <a href="stream/{{id}}">{{name}}</a>
+  <div class="card movie-card" >
+  	<div class="card-image">
+			<img src="http://placehold.it/150x200"/>
+  	</div>
+  	<div class="card-action">
+  		<a href="stream/{{id}}">Watch</a>
+  	</div>
+  </div>
 {{/each}}
